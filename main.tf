@@ -4,6 +4,12 @@ provider "azurerm" {
   features {}
 }
 
+provider "cato" {
+  baseurl    = var.baseurl
+  token      = var.token
+  account_id = var.account_id
+}
+
 resource "azurerm_resource_group" "azure-rg" {
   location = var.location
   name = replace(replace(var.site_name,"-","")," ","_")
