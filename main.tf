@@ -500,18 +500,6 @@ resource "null_resource" "configure_secondary_azure_vsocket" {
           },
           "operationName": "siteAddSecondaryAzureVSocket"
         }' )
-
-      # Extract 'site_id' from the GraphQL response
-      site_id=$(echo $response | jq -r '.data.site.addSecondaryAzureVSocket.id // empty')
-
-      # Check if the site_id is valid
-      if [ -z "$site_id" ]; then
-        echo "Error: Site ID not found in response" >&2
-        exit 1
-      fi
-
-      # Write the site_id to the file in the format '<site_id>'
-      echo "$site_id" > ${path.module}/secondary_azure_vsocket_id.txt
     EOF
   }
 
