@@ -340,34 +340,6 @@ resource "azurerm_subnet_route_table_association" "rt-table-association-lan" {
   ]
 }
 
-## ## Adding source for azure-ha module directly in vnet module as the azure-ha module 
-## ## requires multiple attributes from azure network interfaces and this simplifies the 
-## ## required input parameters and will deploy both the vnet and azure-ha modules in one go 
-
-# module "vsocket-azure-ha" {
-#   source              = "../terraform-cato-vsocket-azure-ha"
-#   # source              = "catonetworks/vsocket-azure-ha/cato"
-#   token                   = var.token
-#   account_id              = var.account_id
-#   lan_prefix              = var.subnet_range_lan
-#   location                = var.location
-#   resource_group_name     = azurerm_resource_group.azure-rg.name
-#   mgmt_nic_name_primary   = azurerm_network_interface.mgmt-nic-primary.name
-#   wan_nic_name_primary    = azurerm_network_interface.wan-nic-primary.name
-#   lan_nic_name_primary    = azurerm_network_interface.lan-nic-primary.name
-#   mgmt_nic_name_secondary = azurerm_network_interface.mgmt-nic-secondary.name
-#   wan_nic_name_secondary  = azurerm_network_interface.wan-nic-secondary.name
-#   lan_nic_name_secondary  = azurerm_network_interface.lan-nic-secondary.name
-#   site_name               = var.site_name
-#   site_description        = var.site_description
-#   site_type               = var.site_type
-#   site_location           = var.site_location
-#   floating_ip             = var.floating_ip
-#   azure_subscription_id   = var.azure_subscription_id
-#   vnet_name               = azurerm_virtual_network.vnet.name
-#   lan_subnet_name         = azurerm_subnet.subnet-lan.name
-# }
-
 resource "cato_socket_site" "azure-site" {
   connection_type = "SOCKET_AZ1500"
   description     = var.site_description
@@ -425,7 +397,9 @@ resource "azurerm_virtual_machine" "vsocket_primary" {
   }
   
   depends_on = [
-    azurerm_managed_disk.vSocket_disk_primary
+    azurerm_managed_disk.vSocket_disk_primary,
+    cato_socket_site.azure-site,
+    data.cato_accountSnapshotSite.azure-site
   ]
 }
 
@@ -472,14 +446,21 @@ SETTINGS
   ]
 }
 
+# To allow socket to upgrade so secondary socket can be added
+resource "null_resource" "sleep_300_seconds" {
+  provisioner "local-exec" {
+    command = "sleep 300"
+  }
+  depends_on = [ azurerm_virtual_machine_extension.vsocket-custom-script-primary ]
+}
+
 #################################################################################
 # Add secondary socket to site via API until socket_site resrouce is updated to natively support
 resource "null_resource" "configure_secondary_azure_vsocket" {
-  depends_on = [azurerm_virtual_machine_extension.vsocket-custom-script-primary]
+  depends_on = [null_resource.sleep_300_seconds]
 
   provisioner "local-exec" {
     command = <<EOF
-      # Execute the GraphQL mutation to get the site id
       response=$(curl -k -X POST \
         -H "Accept: application/json" \
         -H "Content-Type: application/json" \
@@ -509,10 +490,17 @@ resource "null_resource" "configure_secondary_azure_vsocket" {
   }
 }
 
+# Sleep to allow Secondary vSocket serial retrieval
+resource "null_resource" "sleep_30_seconds" {
+  provisioner "local-exec" {
+    command = "sleep 30"
+  }
+  depends_on = [ null_resource.configure_secondary_azure_vsocket ]
+}
 
 # Create Secondary Vsocket Virtual Machine
 data "cato_accountSnapshotSite" "azure-site-secondary" {
-  depends_on = [ null_resource.configure_secondary_azure_vsocket ]
+  depends_on = [ null_resource.sleep_30_seconds ]
   id = cato_socket_site.azure-site.id
 }
 
@@ -549,7 +537,9 @@ resource "azurerm_virtual_machine" "vsocket_secondary" {
   }
   
   depends_on = [
-    azurerm_managed_disk.vSocket_disk_secondary
+    azurerm_managed_disk.vSocket_disk_secondary,
+    data.cato_accountSnapshotSite.azure-site-secondary,
+    null_resource.configure_secondary_azure_vsocket
   ]
 }
 
