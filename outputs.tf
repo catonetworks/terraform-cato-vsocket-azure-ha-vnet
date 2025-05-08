@@ -188,3 +188,12 @@ output "vsocket_secondary_reboot_status" {
   value       = "Reboot triggered via Terraform"
   depends_on  = [null_resource.reboot_vsocket_secondary]
 }
+
+output "cato_license_site" {
+  value = var.license_id == null ? null : {
+    id           = cato_license.license[0].id
+    license_id   = cato_license.license[0].license_id
+    license_info = cato_license.license[0].license_info
+    site_id      = cato_license.license[0].site_id
+  }
+}

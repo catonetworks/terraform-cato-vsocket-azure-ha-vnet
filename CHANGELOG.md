@@ -7,3 +7,8 @@
 
 ### Features
 - Added sleep null resources between primary socket creation and siteAddSecondaryAzureVSocket API to ensure enough time for socket to finish provisioning and upgrading.
+
+## 0.0.7 (2025-05-07)
+
+### Features
+- Added optional license resource and inputs used for commercial site deployments
