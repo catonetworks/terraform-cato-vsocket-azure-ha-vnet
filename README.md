@@ -44,9 +44,9 @@ provider "cato" {
 
 module "vsocket-azure-ha-vnet" {
   source                  = "catonetworks/vsocket-azure-ha-vnet/cato"
-  token                   = "xxxxxxx"
-  account_id              = "xxxxxxx"
-  azure_subscription_id   = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx"
+  token                   = var.cato_token
+  account_id              = var.account_id
+  azure_subscription_id   = var.azure_subscription_id
   location                = "East US"
   native_network_range    = "10.3.0.0/16"
   vnet_network_range      = "10.3.0.0/22" 
