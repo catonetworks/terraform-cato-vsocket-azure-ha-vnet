@@ -8,7 +8,7 @@ data "azurerm_virtual_network" "custom-vnet" {
 resource "azurerm_resource_group" "azure-rg" {
   count    = var.resource_group_name == null ? 1 : 0
   location = var.location
-  name     = replace(replace(var.site_name, "-", ""), " ", "_")
+  name     = replace(replace("${var.site_name}-RG", "-", ""), " ", "_")
   tags     = var.tags
 }
 
