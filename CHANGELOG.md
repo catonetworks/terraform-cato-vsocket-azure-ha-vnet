@@ -12,3 +12,17 @@
 
 ### Features
 - Added optional license resource and inputs used for commercial site deployments
+
+## 0.1.0 (2025-06-03)
+
+## Features
+- Setup to use Azure HA vSocket Module from Cato Networks 
+- Setup to be able to take a resource group / vnet as inputs 
+- Added Tag handling for Azure Resources 
+- Added Additional Dependancies for Resources 
+- Added LifeCycle ignore-changes for several resources 
+- Added Firewall Rules to SGs for Cato Deployment per PS Recommendations 
+- Adjusted Resource naming to fit naming convention 
+- Removed Code which built Socket and Socket site, instead leveraging sub-module per standard practice. 
+- Updated Outputs to reference submodule outputs 
+- Updated ReadMe to incorporate new updates and tfdocs 

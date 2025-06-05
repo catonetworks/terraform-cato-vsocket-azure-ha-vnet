@@ -1,7 +1,7 @@
-## The following attributes are exported:
+# ## The following attributes are exported:
 output "resource_group_name" {
   description = "The name of the Azure Resource Group used for deployment."
-  value       = azurerm_resource_group.azure-rg.name
+  value       = var.resource_group_name == null ? azurerm_resource_group.azure-rg[0].name : var.resource_group_name
 }
 
 output "mgmt_nic_name_primary" {
@@ -41,7 +41,7 @@ output "lan_subnet_id" {
 
 output "vnet_name" {
   description = "The name of the Azure Virtual Network used by the deployment."
-  value       = azurerm_virtual_network.vnet.name
+  value       = var.vnet_name == null ? azurerm_virtual_network.vnet[0].name : var.vnet_name
 }
 
 output "lan_subnet_name" {
@@ -49,28 +49,28 @@ output "lan_subnet_name" {
   value       = azurerm_subnet.subnet-lan.name
 }
 
-# Cato Socket Site Outputs
+# # Cato Socket Site Outputs
 output "cato_site_id" {
   description = "ID of the Cato Socket Site"
-  value       = cato_socket_site.azure-site.id
+  value       = module.cato_socket_site.cato_site_id
 }
 
 output "cato_site_name" {
   description = "Name of the Cato Site"
-  value       = cato_socket_site.azure-site.name
+  value       = module.cato_socket_site.cato_site_name
 }
 
 output "cato_primary_serial" {
   description = "Primary Cato Socket Serial Number"
-  value       = try(local.primary_serial[0], "N/A")
+  value       = module.cato_socket_site.cato_primary_serial
 }
 
 output "cato_secondary_serial" {
   description = "Secondary Cato Socket Serial Number"
-  value       = try(local.secondary_serial[0], "N/A")
+  value       = module.cato_socket_site.cato_secondary_serial
 }
 
-# Network Interfaces Outputs
+# # Network Interfaces Outputs
 output "mgmt_primary_nic_id" {
   description = "ID of the Management Primary Network Interface"
   value       = azurerm_network_interface.mgmt-nic-primary.id
@@ -104,96 +104,83 @@ output "lan_secondary_nic_id" {
 # Virtual Machine Outputs
 output "vsocket_primary_vm_id" {
   description = "ID of the Primary vSocket Virtual Machine"
-  value       = azurerm_virtual_machine.vsocket_primary.id
+  value       = module.cato_socket_site.vsocket_primary_vm_id
 }
 
 output "vsocket_primary_vm_name" {
   description = "Name of the Primary vSocket Virtual Machine"
-  value       = azurerm_virtual_machine.vsocket_primary.name
+  value       = module.cato_socket_site.vsocket_primary_vm_name
 }
 
 output "vsocket_secondary_vm_id" {
   description = "ID of the Secondary vSocket Virtual Machine"
-  value       = azurerm_virtual_machine.vsocket_secondary.id
+  value       = module.cato_socket_site.vsocket_secondary_vm_id
 }
 
 output "vsocket_secondary_vm_name" {
   description = "Name of the Secondary vSocket Virtual Machine"
-  value       = azurerm_virtual_machine.vsocket_secondary.name
+  value       = module.cato_socket_site.vsocket_secondary_vm_name
 }
 
-# Managed Disks Outputs
+# # Managed Disks Outputs
 output "primary_disk_id" {
   description = "ID of the Primary vSocket Managed Disk"
-  value       = azurerm_managed_disk.vSocket_disk_primary.id
+  value       = module.cato_socket_site.primary_disk_id
 }
 
 output "primary_disk_name" {
   description = "Name of the Primary vSocket Managed Disk"
-  value       = azurerm_managed_disk.vSocket_disk_primary.name
+  value       = module.cato_socket_site.primary_disk_name
 }
 
 output "secondary_disk_id" {
   description = "ID of the Secondary vSocket Managed Disk"
-  value       = azurerm_managed_disk.vSocket_disk_secondary.id
+  value       = module.cato_socket_site.secondary_disk_id
 }
 
 output "secondary_disk_name" {
   description = "Name of the Secondary vSocket Managed Disk"
-  value       = azurerm_managed_disk.vSocket_disk_secondary.name
+  value       = module.cato_socket_site.secondary_disk_name
 }
 
-# User Assigned Identity
+# # User Assigned Identity
 output "ha_identity_id" {
   description = "ID of the User Assigned Identity for HA"
-  value       = azurerm_user_assigned_identity.CatoHaIdentity.id
+  value       = module.cato_socket_site.ha_identity_id
 }
 
 output "ha_identity_principal_id" {
   description = "Principal ID of the HA Identity"
-  value       = azurerm_user_assigned_identity.CatoHaIdentity.principal_id
+  value       = module.cato_socket_site.ha_identity_principal_id
 }
 
-# Role Assignments Outputs
+# # Role Assignments Outputs
 output "primary_nic_role_assignment_id" {
   description = "Role Assignment ID for the Primary NIC"
-  value       = azurerm_role_assignment.primary_nic_ha_role.id
+  value       = module.cato_socket_site.primary_nic_role_assignment_id
 }
 
 output "secondary_nic_role_assignment_id" {
   description = "Role Assignment ID for the Secondary NIC"
-  value       = azurerm_role_assignment.secondary_nic_ha_role.id
+  value       = module.cato_socket_site.secondary_nic_role_assignment_id
 }
 
 output "lan_subnet_role_assignment_id" {
   description = "Role Assignment ID for the LAN Subnet"
-  value       = azurerm_role_assignment.lan-subnet-role.id
+  value       = module.cato_socket_site.lan_subnet_role_assignment_id
 }
 
-# LAN MAC Address Output
+# # LAN MAC Address Output
 output "lan_secondary_mac_address" {
   description = "MAC Address of the Secondary LAN Interface"
   value       = azurerm_network_interface.lan-nic-secondary.mac_address
 }
 
-# Reboot Status Outputs
-output "vsocket_primary_reboot_status" {
-  description = "Status of the Primary vSocket VM Reboot"
-  value       = "Reboot triggered via Terraform"
-  depends_on  = [null_resource.reboot_vsocket_primary]
-}
-
-output "vsocket_secondary_reboot_status" {
-  description = "Status of the Secondary vSocket VM Reboot"
-  value       = "Reboot triggered via Terraform"
-  depends_on  = [null_resource.reboot_vsocket_secondary]
-}
-
-output "cato_license_site" {
-  value = var.license_id == null ? null : {
-    id           = cato_license.license[0].id
-    license_id   = cato_license.license[0].license_id
-    license_info = cato_license.license[0].license_info
-    site_id      = cato_license.license[0].site_id
-  }
-}
+# output "cato_license_site" {
+#   value = var.license_id == null ? null : {
+#     id           = cato_license.license[0].id
+#     license_id   = cato_license.license[0].license_id
+#     license_info = cato_license.license[0].license_info
+#     site_id      = cato_license.license[0].site_id
+#   }
+# }
