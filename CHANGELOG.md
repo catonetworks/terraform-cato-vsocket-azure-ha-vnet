@@ -26,3 +26,8 @@
 - Removed Code which built Socket and Socket site, instead leveraging sub-module per standard practice. 
 - Updated Outputs to reference submodule outputs 
 - Updated ReadMe to incorporate new updates and tfdocs 
+
+## 0.1.1 (2025-06-06)
+
+## Features 
+- Fix typo in Module call in main.tf
