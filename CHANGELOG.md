@@ -15,7 +15,7 @@
 
 ## 0.1.0 (2025-06-03)
 
-## Features
+### Features
 - Setup to use Azure HA vSocket Module from Cato Networks 
 - Setup to be able to take a resource group / vnet as inputs 
 - Added Tag handling for Azure Resources 
@@ -29,5 +29,10 @@
 
 ## 0.1.1 (2025-06-06)
 
-## Features 
+### Features 
 - Fix typo in Module call in main.tf
+
+## 0.1.2 (2025-06-10)
+
+### Features
+- fix typo in readme
