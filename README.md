@@ -31,17 +31,6 @@ provider "cato" {
   account_id = var.account_id
 }
 
-provider "azurerm" {
-  subscription_id = var.azure_subscription_id
-  features {}
-}
-
-provider "cato" {
-  baseurl    = var.baseurl
-  token      = var.cato_token
-  account_id = var.account_id
-}
-
 module "vsocket-azure-ha-vnet" {
   source                  = "catonetworks/vsocket-azure-ha-vnet/cato"
   token                   = var.cato_token
