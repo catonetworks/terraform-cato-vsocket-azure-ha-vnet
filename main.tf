@@ -529,7 +529,7 @@ module "cato_socket_site" {
   site_name               = var.site_name
   site_description        = var.site_description
   site_type               = var.site_type
-  site_location           = var.site_location
+  site_location           = local.cur_site_location
   tags                    = var.tags
   depends_on = [
     azurerm_network_interface.lan-nic-primary,
