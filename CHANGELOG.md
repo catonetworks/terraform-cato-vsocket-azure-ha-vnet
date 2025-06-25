@@ -36,3 +36,8 @@
 
 ### Features
 - fix typo in readme
+
+## 0.1.3 (2025-06-25)
+
+### Features
+- Added SiteLocation Lookup based on Cloud Region
