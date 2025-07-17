@@ -122,26 +122,26 @@ output "vsocket_secondary_vm_name" {
   value       = module.cato_socket_site.vsocket_secondary_vm_name
 }
 
-# # Managed Disks Outputs
-output "primary_disk_id" {
-  description = "ID of the Primary vSocket Managed Disk"
-  value       = module.cato_socket_site.primary_disk_id
-}
+# # # Managed Disks Outputs
+# output "primary_disk_id" {
+#   description = "ID of the Primary vSocket Managed Disk"
+#   value       = module.cato_socket_site.primary_disk_id
+# }
 
-output "primary_disk_name" {
-  description = "Name of the Primary vSocket Managed Disk"
-  value       = module.cato_socket_site.primary_disk_name
-}
+# output "primary_disk_name" {
+#   description = "Name of the Primary vSocket Managed Disk"
+#   value       = module.cato_socket_site.primary_disk_name
+# }
 
-output "secondary_disk_id" {
-  description = "ID of the Secondary vSocket Managed Disk"
-  value       = module.cato_socket_site.secondary_disk_id
-}
+# output "secondary_disk_id" {
+#   description = "ID of the Secondary vSocket Managed Disk"
+#   value       = module.cato_socket_site.secondary_disk_id
+# }
 
-output "secondary_disk_name" {
-  description = "Name of the Secondary vSocket Managed Disk"
-  value       = module.cato_socket_site.secondary_disk_name
-}
+# output "secondary_disk_name" {
+#   description = "Name of the Secondary vSocket Managed Disk"
+#   value       = module.cato_socket_site.secondary_disk_name
+# }
 
 # # User Assigned Identity
 output "ha_identity_id" {

@@ -53,3 +53,8 @@
 
 ### Features 
 - Fix malformed sitelocation.tf
+
+## 0.1.6 (2025-07-17)
+
+### Features 
+- Remove depricated outputs (Managed Disk)
