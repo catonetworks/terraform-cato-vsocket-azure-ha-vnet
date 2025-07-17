@@ -41,3 +41,10 @@
 
 ### Features
 - Added SiteLocation Lookup based on Cloud Region
+
+## 0.1.4 (2025-07-16)
+
+### Features 
+ - Updated SiteLocation (v0.0.2)
+ - Version Lock Cato Provider to V0.0.30 or greater
+ - Version Lock Terraform to 1.5 or Greater

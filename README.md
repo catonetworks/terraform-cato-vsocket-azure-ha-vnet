@@ -87,14 +87,15 @@ Apache 2 Licensed. See [LICENSE](https://github.com/catonetworks/terraform-cato-
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5 |
+| <a name="requirement_cato"></a> [cato](#requirement\_cato) | >= 0.0.30 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
-| <a name="provider_cato"></a> [cato](#provider\_cato) | n/a |
+| <a name="provider_cato"></a> [cato](#provider\_cato) | >= 0.0.30 |
 
 ## Modules
 
@@ -200,6 +201,7 @@ Apache 2 Licensed. See [LICENSE](https://github.com/catonetworks/terraform-cato-
 | <a name="output_secondary_disk_id"></a> [secondary\_disk\_id](#output\_secondary\_disk\_id) | ID of the Secondary vSocket Managed Disk |
 | <a name="output_secondary_disk_name"></a> [secondary\_disk\_name](#output\_secondary\_disk\_name) | Name of the Secondary vSocket Managed Disk |
 | <a name="output_secondary_nic_role_assignment_id"></a> [secondary\_nic\_role\_assignment\_id](#output\_secondary\_nic\_role\_assignment\_id) | Role Assignment ID for the Secondary NIC |
+| <a name="output_site_location"></a> [site\_location](#output\_site\_location) | n/a |
 | <a name="output_vnet_name"></a> [vnet\_name](#output\_vnet\_name) | The name of the Azure Virtual Network used by the deployment. |
 | <a name="output_vsocket_primary_vm_id"></a> [vsocket\_primary\_vm\_id](#output\_vsocket\_primary\_vm\_id) | ID of the Primary vSocket Virtual Machine |
 | <a name="output_vsocket_primary_vm_name"></a> [vsocket\_primary\_vm\_name](#output\_vsocket\_primary\_vm\_name) | Name of the Primary vSocket Virtual Machine |
