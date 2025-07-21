@@ -6,6 +6,8 @@ Terraform module which creates a VNET in Azure, required subnets, network interf
 - This module will look up the Cato Site Location information based on the Location of Azure specified.  If you would like to override this behavior, please leverage the below for help finding the correct values.
 - For help with finding exact sytax to match site location for city, state_name, country_name and timezone, please refer to the [cato_siteLocation data source](https://registry.terraform.io/providers/catonetworks/cato/latest/docs/data-sources/siteLocation).
 - For help with finding a license id to assign, please refer to the [cato_licensingInfo data source](https://registry.terraform.io/providers/catonetworks/cato/latest/docs/data-sources/licensingInfo).
+- For Translated Ranges, "Enable Static Range Translation" must be enabled for more information please refer to [Configuring System Settings for the Account](https://support.catonetworks.com/hc/en-us/articles/4413280536849-Configuring-System-Settings-for-the-Account)
+
 
 
 ## Usage
@@ -38,7 +40,7 @@ module "vsocket-azure-ha-vnet" {
   account_id              = var.account_id
   azure_subscription_id   = var.azure_subscription_id
   location                = "East US"
-  native_network_range    = "10.3.0.0/16"
+  native_network_range    = "10.3.0.0/22"
   vnet_network_range      = "10.3.0.0/22" 
   subnet_range_mgmt       = "10.3.1.0/24"
   subnet_range_wan        = "10.3.2.0/24"
@@ -49,6 +51,16 @@ module "vsocket-azure-ha-vnet" {
   site_name               = "Your-Cato-site-name-here"
   site_description        = "Your Cato site desc here"
   # Site Location is Derived from Cloud Region / Location
+  enable_static_range_translation = false #set to true if the Account settings has been updated.
+  routed_networks         = { 
+    "Peered-VNET-1" = {
+      subnet = "10.100.1.0/24"
+    }
+    "On-Prem-Network-With-NAT" = {
+      subnet            = "192.168.51.0/24"
+      translated_subnet = "10.250.1.0/24" # Example translated range, SRT Required, set enable_static_range_translation = true
+    }
+  }
   tags = {
     built_with = "terraform"
   }
@@ -88,13 +100,14 @@ Apache 2 Licensed. See [LICENSE](https://github.com/catonetworks/terraform-cato-
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >= 4.33.0 |
 | <a name="requirement_cato"></a> [cato](#requirement\_cato) | >= 0.0.30 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | >= 4.33.0 |
 | <a name="provider_cato"></a> [cato](#provider\_cato) | >= 0.0.30 |
 
 ## Modules
@@ -150,6 +163,7 @@ Apache 2 Licensed. See [LICENSE](https://github.com/catonetworks/terraform-cato-
 | <a name="input_baseurl"></a> [baseurl](#input\_baseurl) | Base URL for the Cato Networks API. | `string` | `"https://api.catonetworks.com/api/v1/graphql2"` | no |
 | <a name="input_disk_size_gb"></a> [disk\_size\_gb](#input\_disk\_size\_gb) | Size of the managed disk in GB. | `number` | `8` | no |
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | n/a | `list(string)` | <pre>[<br/>  "168.63.129.16",<br/>  "10.254.254.1",<br/>  "1.1.1.1",<br/>  "8.8.8.8"<br/>]</pre> | no |
+| <a name="input_enable_static_range_translation"></a> [enable\_static\_range\_translation](#input\_enable\_static\_range\_translation) | Enables the ability to use translated ranges | `string` | `false` | no |
 | <a name="input_floating_ip"></a> [floating\_ip](#input\_floating\_ip) | Floating IP Address for the vSocket | `string` | `null` | no |
 | <a name="input_image_reference_id"></a> [image\_reference\_id](#input\_image\_reference\_id) | The path to the image used to deploy a specific version of the virtual socket. | `string` | `"/Subscriptions/38b5ec1d-b3b6-4f50-a34e-f04a67121955/Providers/Microsoft.Compute/Locations/eastus/Publishers/catonetworks/ArtifactTypes/VMImage/Offers/cato_socket/Skus/public-cato-socket/Versions/19.0.17805"` | no |
 | <a name="input_lan_ip_primary"></a> [lan\_ip\_primary](#input\_lan\_ip\_primary) | Local IP Address of socket LAN interface | `string` | `null` | no |
@@ -159,6 +173,8 @@ Apache 2 Licensed. See [LICENSE](https://github.com/catonetworks/terraform-cato-
 | <a name="input_location"></a> [location](#input\_location) | n/a | `string` | `null` | no |
 | <a name="input_native_network_range"></a> [native\_network\_range](#input\_native\_network\_range) | Choose a unique range for your Azure environment that does not conflict with the rest of your Wide Area Network.<br/>    The accepted input format is Standard CIDR Notation, e.g. X.X.X.X/X | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | (Optional) if a custom resource group is passed, we will use the custom resource group.  If it's not, we will build one | `any` | `null` | no |
+| <a name="input_routed_networks"></a> [routed\_networks](#input\_routed\_networks) | A map of routed networks to be accessed behind the vSocket site.<br/>  - The key is the logical name for the network.<br/>  - The value is an object containing:<br/>    - "subnet" (string, required): The actual CIDR range of the network.<br/>    - "translated\_subnet" (string, optional): The NATed CIDR range if translation is used.<br/>  Example: <br/>  routed\_networks = {<br/>    "Peered-VNET-1" = {<br/>      subnet = "10.100.1.0/24"<br/>    }<br/>    "On-Prem-Network-NAT" = {<br/>      subnet            = "192.168.51.0/24"<br/>      translated\_subnet = "10.200.1.0/24"<br/>    }<br/>  } | <pre>map(object({<br/>    subnet            = string<br/>    translated_subnet = optional(string)<br/>  }))</pre> | `{}` | no |
+| <a name="input_routed_ranges_gateway"></a> [routed\_ranges\_gateway](#input\_routed\_ranges\_gateway) | Routed ranges gateway. If null, the first IP of the LAN subnet will be used. | `string` | `null` | no |
 | <a name="input_site_description"></a> [site\_description](#input\_site\_description) | Description of the vsocket site | `string` | n/a | yes |
 | <a name="input_site_location"></a> [site\_location](#input\_site\_location) | Site location which is used by the Cato Socket to connect to the closest Cato PoP. If not specified, the location will be derived from the Azure region dynamicaly. | <pre>object({<br/>    city         = string<br/>    country_code = string<br/>    state_code   = string<br/>    timezone     = string<br/>  })</pre> | <pre>{<br/>  "city": null,<br/>  "country_code": null,<br/>  "state_code": null,<br/>  "timezone": null<br/>}</pre> | no |
 | <a name="input_site_name"></a> [site\_name](#input\_site\_name) | Name of the vsocket site | `string` | n/a | yes |

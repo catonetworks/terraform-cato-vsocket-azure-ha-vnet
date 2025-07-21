@@ -509,28 +509,32 @@ resource "azurerm_subnet_route_table_association" "rt-table-association-lan" {
 }
 
 module "cato_socket_site" {
-  source                  = "catonetworks/vsocket-azure-ha/cato"
-  token                   = var.token
-  account_id              = var.account_id
-  location                = var.location
-  azure_subscription_id   = var.azure_subscription_id
-  resource_group_name     = var.resource_group_name == null ? azurerm_resource_group.azure-rg[0].name : var.resource_group_name
-  lan_subnet_name         = azurerm_subnet.subnet-lan.name
-  mgmt_nic_name_primary   = azurerm_network_interface.mgmt-nic-primary.name
-  wan_nic_name_primary    = azurerm_network_interface.wan-nic-primary.name
-  lan_nic_name_primary    = azurerm_network_interface.lan-nic-primary.name
-  mgmt_nic_name_secondary = azurerm_network_interface.mgmt-nic-secondary.name
-  wan_nic_name_secondary  = azurerm_network_interface.wan-nic-secondary.name
-  lan_nic_name_secondary  = azurerm_network_interface.lan-nic-secondary.name
-  native_network_range    = var.native_network_range
-  floating_ip             = var.floating_ip
-  subnet_range_lan        = var.subnet_range_lan
-  vnet_name               = var.vnet_name == null ? azurerm_virtual_network.vnet[0].name : var.vnet_name
-  site_name               = var.site_name
-  site_description        = var.site_description
-  site_type               = var.site_type
-  site_location           = local.cur_site_location
-  tags                    = var.tags
+  source                          = "catonetworks/vsocket-azure-ha/cato"
+  token                           = var.token
+  account_id                      = var.account_id
+  location                        = var.location
+  azure_subscription_id           = var.azure_subscription_id
+  resource_group_name             = var.resource_group_name == null ? azurerm_resource_group.azure-rg[0].name : var.resource_group_name
+  lan_subnet_name                 = azurerm_subnet.subnet-lan.name
+  mgmt_nic_name_primary           = azurerm_network_interface.mgmt-nic-primary.name
+  wan_nic_name_primary            = azurerm_network_interface.wan-nic-primary.name
+  lan_nic_name_primary            = azurerm_network_interface.lan-nic-primary.name
+  mgmt_nic_name_secondary         = azurerm_network_interface.mgmt-nic-secondary.name
+  wan_nic_name_secondary          = azurerm_network_interface.wan-nic-secondary.name
+  lan_nic_name_secondary          = azurerm_network_interface.lan-nic-secondary.name
+  native_network_range            = var.native_network_range
+  floating_ip                     = var.floating_ip
+  subnet_range_lan                = var.subnet_range_lan
+  vnet_name                       = var.vnet_name == null ? azurerm_virtual_network.vnet[0].name : var.vnet_name
+  site_name                       = var.site_name
+  site_description                = var.site_description
+  site_type                       = var.site_type
+  site_location                   = local.cur_site_location
+  tags                            = var.tags
+  routed_networks                 = var.routed_networks
+  routed_ranges_gateway           = var.routed_ranges_gateway
+  enable_static_range_translation = var.enable_static_range_translation
+
   depends_on = [
     azurerm_network_interface.lan-nic-primary,
     azurerm_network_interface.lan-nic-secondary,

@@ -58,3 +58,12 @@
 
 ### Features 
 - Remove depricated outputs (Managed Disk)
+
+## 0.1.7 (2025-07-21)
+
+### Features
+ - Added support for Static Range Translation
+ - Added support for Routed Ranges 
+ - Updated SiteLocation for Poland and Switzerland
+ - Updated Readme for Clarity around SRT and Translated Networks 
+ - Added Version requirements to Azure Provider

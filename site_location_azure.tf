@@ -69,10 +69,11 @@ locals {
     "norwayeast"         = { city = "Oslo", state = null, country = "Norway", continent = "Europe", timezone = "UTC+1" }
     "norwaywest"         = { city = "Stavanger", state = null, country = "Norway", continent = "Europe", timezone = "UTC+1" }
     "swedencentral"      = { city = "Gävle", state = null, country = "Sweden", continent = "Europe", timezone = "UTC+1" }
-    "switzerlandnorth"   = { city = "Zürich", state = null, country = "Switzerland", continent = "Europe", timezone = "UTC+1" }
+    "switzerlandnorth"   = { city = "Zürich (Kreis 1)", state = null, country = "Switzerland", continent = "Europe", timezone = "UTC+1" }
     "switzerlandwest"    = { city = "Genève", state = null, country = "Switzerland", continent = "Europe", timezone = "UTC+1" }
     "uksouth"            = { city = "London", state = null, country = "United Kingdom", continent = "Europe", timezone = "UTC+0" }
     "ukwest"             = { city = "Cardiff", state = null, country = "United Kingdom", continent = "Europe", timezone = "UTC+0" }
+    "polandcentral"      = { city = "Warsaw", state = null, country = "Poland", continent = "Europe", timezone = "UTC+1" }
 
     # Asia Pacific
     "eastasia"        = { city = "Hong Kong", state = null, country = "Hong Kong", continent = "Asia Pacific", timezone = "UTC+8" }
