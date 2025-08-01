@@ -532,7 +532,6 @@ module "cato_socket_site" {
   site_location                   = local.cur_site_location
   tags                            = var.tags
   routed_networks                 = var.routed_networks
-  routed_ranges_gateway           = var.routed_ranges_gateway
   enable_static_range_translation = var.enable_static_range_translation
 
   depends_on = [
