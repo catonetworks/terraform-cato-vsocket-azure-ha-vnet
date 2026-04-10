@@ -253,64 +253,19 @@ resource "azurerm_network_security_group" "mgmt-sg" {
   name                = replace(replace("${var.site_name}-MGMTSecurityGroup", "-", "_"), " ", "_")
   resource_group_name = var.resource_group_name == null ? azurerm_resource_group.azure-rg[0].name : var.resource_group_name
 
-  security_rule {
-    name                       = "Allow-DNS-TCP"
-    priority                   = 100
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "53"
-    source_address_prefix      = "*"
-    destination_address_prefix = "Internet"
-  }
-
-  security_rule {
-    name                       = "Allow-DNS-UDP"
-    priority                   = 110
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "Udp"
-    source_port_range          = "*"
-    destination_port_range     = "53"
-    source_address_prefix      = "*"
-    destination_address_prefix = "Internet"
-  }
-
-  security_rule {
-    name                       = "Allow-HTTPS-TCP"
-    priority                   = 120
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "443"
-    source_address_prefix      = "*"
-    destination_address_prefix = "Internet"
-  }
-
-  security_rule {
-    name                       = "Allow-HTTPS-UDP"
-    priority                   = 130
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "Udp"
-    source_port_range          = "*"
-    destination_port_range     = "443"
-    source_address_prefix      = "*"
-    destination_address_prefix = "Internet"
-  }
-
-  security_rule {
-    name                       = "Deny-All-Outbound"
-    priority                   = 4096
-    direction                  = "Outbound"
-    access                     = "Deny"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+  dynamic "security_rule" {
+    for_each = var.mgmt_sg_rules
+    content {
+      name                       = security_rule.value.name
+      priority                   = security_rule.value.priority
+      direction                  = security_rule.value.direction
+      access                     = security_rule.value.access
+      protocol                   = security_rule.value.protocol
+      source_port_range          = security_rule.value.source_port_range
+      destination_port_range     = security_rule.value.destination_port_range
+      source_address_prefix      = security_rule.value.source_address_prefix
+      destination_address_prefix = security_rule.value.destination_address_prefix
+    }
   }
 
   tags = var.tags
@@ -324,64 +279,19 @@ resource "azurerm_network_security_group" "wan-sg" {
   name                = replace(replace("${var.site_name}-WANSecurityGroup", "-", "_"), " ", "_")
   resource_group_name = var.resource_group_name == null ? azurerm_resource_group.azure-rg[0].name : var.resource_group_name
 
-  security_rule {
-    name                       = "Allow-DNS-TCP"
-    priority                   = 100
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "53"
-    source_address_prefix      = "*"
-    destination_address_prefix = "Internet"
-  }
-
-  security_rule {
-    name                       = "Allow-DNS-UDP"
-    priority                   = 110
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "Udp"
-    source_port_range          = "*"
-    destination_port_range     = "53"
-    source_address_prefix      = "*"
-    destination_address_prefix = "Internet"
-  }
-
-  security_rule {
-    name                       = "Allow-HTTPS-TCP"
-    priority                   = 120
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "443"
-    source_address_prefix      = "*"
-    destination_address_prefix = "Internet"
-  }
-
-  security_rule {
-    name                       = "Allow-HTTPS-UDP"
-    priority                   = 130
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "Udp"
-    source_port_range          = "*"
-    destination_port_range     = "443"
-    source_address_prefix      = "*"
-    destination_address_prefix = "Internet"
-  }
-
-  security_rule {
-    name                       = "Deny-All-Outbound"
-    priority                   = 4096
-    direction                  = "Outbound"
-    access                     = "Deny"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+  dynamic "security_rule" {
+    for_each = var.wan_sg_rules
+    content {
+      name                       = security_rule.value.name
+      priority                   = security_rule.value.priority
+      direction                  = security_rule.value.direction
+      access                     = security_rule.value.access
+      protocol                   = security_rule.value.protocol
+      source_port_range          = security_rule.value.source_port_range
+      destination_port_range     = security_rule.value.destination_port_range
+      source_address_prefix      = security_rule.value.source_address_prefix
+      destination_address_prefix = security_rule.value.destination_address_prefix
+    }
   }
 
   tags = var.tags
@@ -395,28 +305,19 @@ resource "azurerm_network_security_group" "lan-sg" {
   name                = replace(replace("${var.site_name}-LANSecurityGroup", "-", "_"), " ", "_")
   resource_group_name = var.resource_group_name == null ? azurerm_resource_group.azure-rg[0].name : var.resource_group_name
 
-  security_rule {
-    name                       = "Allow-All-Inbound"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-
-  security_rule {
-    name                       = "Allow-All-Outbound"
-    priority                   = 100
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+  dynamic "security_rule" {
+    for_each = var.lan_sg_rules
+    content {
+      name                       = security_rule.value.name
+      priority                   = security_rule.value.priority
+      direction                  = security_rule.value.direction
+      access                     = security_rule.value.access
+      protocol                   = security_rule.value.protocol
+      source_port_range          = security_rule.value.source_port_range
+      destination_port_range     = security_rule.value.destination_port_range
+      source_address_prefix      = security_rule.value.source_address_prefix
+      destination_address_prefix = security_rule.value.destination_address_prefix
+    }
   }
 
   tags = var.tags
@@ -510,6 +411,7 @@ resource "azurerm_subnet_route_table_association" "rt-table-association-lan" {
 
 module "cato_socket_site" {
   source                          = "catonetworks/vsocket-azure-ha/cato"
+  # source                          = "../terraform-cato-vsocket-azure-ha"
   token                           = var.token
   account_id                      = var.account_id
   location                        = var.location

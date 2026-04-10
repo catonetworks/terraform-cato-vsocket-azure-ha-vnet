@@ -78,3 +78,8 @@
 ## 0.1.9 (2026-02-18)
 ### Features
 - Reverted to provider version 0.0.57 to address local_ip and gateway api param issue in state
+
+## 0.1.10 (2026-04-10)
+### Features
+- Updated version of provider adding in lastest SDK with updated ENUM values for accounSnapshot and license
+- Updated security groups to be configurable as variables
