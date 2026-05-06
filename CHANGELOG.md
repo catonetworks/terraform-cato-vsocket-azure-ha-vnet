@@ -1,17 +1,68 @@
-## 0.0.5 (2025-05-02)
+# Changelog
+
+## 0.1.11 (2026-05-06)
+
+### Changed
+- Updated AzureRM to 4.71.0
+
+## 0.1.10 (2026-04-10)
 
 ### Features
-- Updating module to fix siteAddSecondaryAzureVSocket null resource
+- Updated version of provider adding in lastest SDK with updated ENUM values for accounSnapshot and license
+- Updated security groups to be configurable as variables
 
-## 0.0.6 (2025-05-07)
-
-### Features
-- Added sleep null resources between primary socket creation and siteAddSecondaryAzureVSocket API to ensure enough time for socket to finish provisioning and upgrading.
-
-## 0.0.7 (2025-05-07)
+## 0.1.9 (2026-02-18)
 
 ### Features
-- Added optional license resource and inputs used for commercial site deployments
+- Reverted to provider version 0.0.57 to address local_ip and gateway api param issue in state
+
+## 0.1.8 (2025-08-01)
+
+### Features
+ - Updated to use latest provider version 
+  - Adjusted routed_networks call to include interface_index 
+ - Version Lock to Provider version 0.0.38 or greater
+
+## 0.1.7 (2025-07-21)
+
+### Features
+ - Added support for Static Range Translation
+ - Added support for Routed Ranges 
+ - Updated SiteLocation for Poland and Switzerland
+ - Updated Readme for Clarity around SRT and Translated Networks 
+ - Added Version requirements to Azure Provider
+
+## 0.1.6 (2025-07-17)
+
+### Features 
+- Remove depricated outputs (Managed Disk)
+
+## 0.1.5 (2025-07-17)
+
+### Features 
+- Fix malformed sitelocation.tf
+
+## 0.1.4 (2025-07-16)
+
+### Features 
+ - Updated SiteLocation (v0.0.2)
+ - Version Lock Cato Provider to V0.0.30 or greater
+ - Version Lock Terraform to 1.5 or Greater
+
+## 0.1.3 (2025-06-25)
+
+### Features
+- Added SiteLocation Lookup based on Cloud Region
+
+## 0.1.2 (2025-06-10)
+
+### Features
+- fix typo in readme
+
+## 0.1.1 (2025-06-06)
+
+### Features 
+- Fix typo in Module call in main.tf
 
 ## 0.1.0 (2025-06-03)
 
@@ -25,61 +76,19 @@
 - Adjusted Resource naming to fit naming convention 
 - Removed Code which built Socket and Socket site, instead leveraging sub-module per standard practice. 
 - Updated Outputs to reference submodule outputs 
-- Updated ReadMe to incorporate new updates and tfdocs 
+- Updated ReadMe to incorporate new updates and tfdocs
 
-## 0.1.1 (2025-06-06)
-
-### Features 
-- Fix typo in Module call in main.tf
-
-## 0.1.2 (2025-06-10)
+## 0.0.7 (2025-05-07)
 
 ### Features
-- fix typo in readme
+- Added optional license resource and inputs used for commercial site deployments
 
-## 0.1.3 (2025-06-25)
-
-### Features
-- Added SiteLocation Lookup based on Cloud Region
-
-## 0.1.4 (2025-07-16)
-
-### Features 
- - Updated SiteLocation (v0.0.2)
- - Version Lock Cato Provider to V0.0.30 or greater
- - Version Lock Terraform to 1.5 or Greater
-
-## 0.1.5 (2025-07-17)
-
-### Features 
-- Fix malformed sitelocation.tf
-
-## 0.1.6 (2025-07-17)
-
-### Features 
-- Remove depricated outputs (Managed Disk)
-
-## 0.1.7 (2025-07-21)
+## 0.0.6 (2025-05-07)
 
 ### Features
- - Added support for Static Range Translation
- - Added support for Routed Ranges 
- - Updated SiteLocation for Poland and Switzerland
- - Updated Readme for Clarity around SRT and Translated Networks 
- - Added Version requirements to Azure Provider
+- Added sleep null resources between primary socket creation and siteAddSecondaryAzureVSocket API to ensure enough time for socket to finish provisioning and upgrading.
 
-## 0.1.8 (2025-08-01)
+## 0.0.5 (2025-05-02)
 
 ### Features
- - Updated to use latest provider version 
-  - Adjusted routed_networks call to include interface_index 
- - Version Lock to Provider version 0.0.38 or greater
-
-## 0.1.9 (2026-02-18)
-### Features
-- Reverted to provider version 0.0.57 to address local_ip and gateway api param issue in state
-
-## 0.1.10 (2026-04-10)
-### Features
-- Updated version of provider adding in lastest SDK with updated ENUM values for accounSnapshot and license
-- Updated security groups to be configurable as variables
+- Updating module to fix siteAddSecondaryAzureVSocket null resource

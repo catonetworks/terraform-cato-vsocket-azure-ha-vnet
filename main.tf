@@ -410,7 +410,7 @@ resource "azurerm_subnet_route_table_association" "rt-table-association-lan" {
 }
 
 module "cato_socket_site" {
-  source                          = "catonetworks/vsocket-azure-ha/cato"
+  source = "catonetworks/vsocket-azure-ha/cato"
   # source                          = "../terraform-cato-vsocket-azure-ha"
   token                           = var.token
   account_id                      = var.account_id
