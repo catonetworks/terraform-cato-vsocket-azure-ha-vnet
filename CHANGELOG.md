@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.12 (2026-06-29)
+
+### Changed
+- Updated Cato Terraform Provider to 0.0.88
+
 ## 0.1.11 (2026-05-06)
 
 ### Changed
